@@ -4,41 +4,30 @@
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
+        <h1>Gerenciamento de Detentos</h1>
         <a href="{{ route('detentos.create') }}" class="btn btn-success">
-            <i class="fas fa-plus"></i> Cadastrar
+            <i class="fas fa-plus mr-1"></i> Cadastrar
         </a>
     </div>
 @stop
 
 @section('content')
-    {{-- Exibe mensagem de sucesso se houver --}}
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    @endif
+    {{-- Renderiza o arquivo de pesquisa --}}
+    @include('detentos.search')
 
     <div class="card card-secondary card-outline">
-        <div class="card-header">
-            <h3 class="card-title">Detentos Cadastrados</h3>
-        </div>
-
         <div class="card-body table-responsive p-0">
-            <table class="table table-hover text-nowrap">
+            <table class="table table-striped table-valign-middle">
                 <thead>
                     <tr>
                         <th>Nome</th>
                         <th>Matrícula</th>
-                        <th>Data Inclusão</th>
-                        <th>Tipo Inclusão</th>
-                        <th>Guia Solicitada?</th>
-                        <th>Status Guia</th>
+                        <th>Inclusão</th>
+                        <th>Tipo</th>
+                        <th>Guia Solicitada</th>
+                        <th>Status</th>
                         <th>Nº Guia</th>
-                        <th>Unidade Destino</th>
-                        <th>Ações</th>
+                        <th class="text-center">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,54 +35,48 @@
                         <tr>
                             <td>{{ $detento->nome }}</td>
                             <td>{{ number_format($detento->matricula, 0, ',', '.') }}</td>
-
-                            {{-- Formatação de data brasileira --}}
-                            <td>{{ $detento->data_inclusao ? $detento->data_inclusao->format('d/m/Y') : '-' }}</td>
-
+                            <td>{{ $detento->data_inclusao?->format('d/m/Y') ?? '-' }}</td>
                             <td>{{ $detento->tipoInclusao->descricao ?? '-' }}</td>
-
-                            {{-- Data da solicitação --}}
-                            <td>{{ $detento->data_solicitacao ? $detento->data_solicitacao->format('d/m/Y') : '-' }}</td>
-
-                            {{-- Lógica visual para o Status --}}
+                            <td>{{ $detento->data_solicitacao?->format('d/m/Y') ?? '-' }}</td>
                             <td>
-                                @if ($detento->saiu_guia)
-                                    <span class="badge badge-success">Emitida</span>
-                                @else
-                                    <span class="badge badge-secondary">Aguardando</span>
-                                @endif
+                                <span class="badge {{ $detento->saiu_guia ? 'badge-success' : 'badge-secondary' }}">
+                                    {{ $detento->saiu_guia ? 'Emitida' : 'Aguardando' }}
+                                </span>
                             </td>
                             <td>{{ $detento->numero_guia ?? '-' }}</td>
-                            <td>{{ $detento->unidade_destino ?? '-' }}</td>
-                            <td>
-                                {{-- Botão Editar --}}
-                                <a href="{{ route('detentos.edit', $detento->id) }}" class="btn btn-sm btn-info"
-                                    title="Editar">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-
-                                {{-- Botão Excluir (Formulário é obrigatório para segurança) --}}
-                                <form action="{{ route('detentos.destroy', $detento->id) }}" method="POST"
-                                    class="d-inline"
-                                    onsubmit="return confirm('Tem certeza que deseja excluir este detento?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" title="Excluir">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    <a href="{{ route('detentos.edit', $detento->id) }}" class="btn btn-sm btn-info"
+                                        title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="{{ route('detentos.destroy', $detento->id) }}" method="POST"
+                                        class="d-inline" onsubmit="return confirm('Inativar este cadastro?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Inativar">
+                                            <i class="fas fa-user-slash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center">Nenhum registro encontrado.</td>
+                            <td colspan="8" class="text-center py-4">Nenhum registro encontrado para os filtros
+                                aplicados.</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
-            <div class="d-flex justify-content-center">
-                {{ $detentos->links('pagination::bootstrap-4') }}
-            </div>
         </div>
+
+        @if ($detentos->hasPages())
+            <div class="card-footer clearfix">
+                <div class="float-right">
+                    {{ $detentos->appends(request()->query())->links('pagination::bootstrap-4') }}
+                </div>
+            </div>
+        @endif
     </div>
 @stop

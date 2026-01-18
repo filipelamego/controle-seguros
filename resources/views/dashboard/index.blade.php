@@ -75,6 +75,8 @@
                                 <tr>
                                     <th>Matrícula</th>
                                     <th>Nome</th>
+                                    <th>Data Inclusão</th>
+                                    <th>Situação</th>
                                     <th>Nº Guia</th>
                                     <th>Unidade Destino</th>
                                 </tr>
@@ -84,6 +86,10 @@
                                     <tr>
                                         <td>{{ number_format($detento->matricula, 0, ',', '.') }}</td>
                                         <td>{{ $detento->nome }}</td>
+                                        <td>
+                                            {{ $detento->data_inclusao ? \Carbon\Carbon::parse($detento->data_inclusao)->format('d/m/Y') : '-' }}
+                                        </td>
+                                        <td>{{ $detento->tipoInclusao->descricao ?? 'N/A' }}</td>
                                         <td>{{ $detento->numero_guia }}</td>
                                         <td>{{ $detento->unidade_destino }}</td>
                                     </tr>

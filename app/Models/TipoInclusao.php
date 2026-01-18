@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class TipoInclusao extends Model
 {
-    use HasFactory;
-
     protected $table = 'tipo_inclusao';
 
     protected $fillable = [

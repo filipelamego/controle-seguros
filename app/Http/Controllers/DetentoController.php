@@ -2,78 +2,75 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreDetentoRequest;
 use App\Models\Detento;
-use App\Models\TipoInclusao;
+use App\Services\DetentoService;
 use Illuminate\Http\Request;
 
 class DetentoController extends Controller
 {
+    protected $detentoService;
 
-    public function index()
+    public function __construct(DetentoService $detentoService)
     {
-        $detentos = Detento::with('tipoInclusao')
-            ->where('ativo', 1)
-            ->orderBy('nome')->paginate(10);
-        $tipoInclusao = TipoInclusao::orderBy('descricao')->get();
+        $this->detentoService = $detentoService;
+    }
+
+    public function index(Request $request)
+    {
+        $filters = $request->all();
+
+        $detentos = $this->detentoService->getListagemPaginada($filters);
+        $tipoInclusao = $this->detentoService->getTiposInclusao();
+
         return view('detentos.index', compact('detentos', 'tipoInclusao'));
     }
 
     public function create()
     {
-        $tipoInclusao = TipoInclusao::orderBy('descricao')->get();
+        $tipoInclusao = $this->detentoService->getTiposInclusao();
+
         return view('detentos.create', compact('tipoInclusao'));
     }
 
-    public function store(Request $request)
+    public function store(StoreDetentoRequest $request)
     {
-        // Validação simples
-        $request->validate([
-            'nome' => 'required',
-            'matricula' => 'required|unique:detentos',
-            'data_inclusao' => 'required|date',
-        ]);
+        // O uso do $request->validated() é mais seguro que o all()
+        $this->detentoService->store($request->validated());
 
-        Detento::create($request->all());
+        toastr()->success('Detento cadastrado com sucesso!', 'Concluído');
 
-        return redirect()->route('detentos.index')
-            ->with('success', 'Detento cadastrado com sucesso!');
+        return redirect()->route('detentos.index');
     }
 
     public function edit($id)
     {
         $detento = Detento::findOrFail($id);
-        $tipoInclusao = TipoInclusao::orderBy('descricao')->get();
+        $tipoInclusao = $this->detentoService->getTiposInclusao();
+
         return view('detentos.edit', compact('detento', 'tipoInclusao'));
     }
 
     public function update(Request $request, $id)
     {
-        $detento = Detento::findOrFail($id);
+        // Para o update, você poderia criar um UpdateDetentoRequest também
+        $this->detentoService->update($id, $request->all());
 
-        // Atualiza os dados
-        $detento->update($request->all());
-
-        return redirect()->route('detentos.index')
-            ->with('success', 'Cadastro atualizado!');
+        toastr()->success('Detento atualizado com sucesso!', 'Concluído');
+        return redirect()->route('detentos.index');
     }
 
     public function destroy($id)
     {
-        $detento = Detento::findOrFail($id);
+        $this->detentoService->inativar($id);
 
-        // Alterando para inativo em vez de excluir
-        $detento->ativo = false;
-        $detento->save(); // Salvando a alteração no banco de dados
-
-        return redirect()->route('detentos.index')
-            ->with('success', 'Detento inativado com sucesso!');
+        toastr()->success('Detento excluído com sucesso!', 'Concluído');
+        return redirect()->route('detentos.index');
     }
 
     public function buscarPorMatricula(Request $request)
     {
-        $matricula = $request->get('matricula');
-
-        $detento = Detento::where('matricula', $matricula)->first();
+        $detento = $this->detentoService->buscarPorMatricula($request->get('matricula'));
 
         if ($detento) {
             return response()->json([
@@ -82,6 +79,6 @@ class DetentoController extends Controller
             ]);
         }
 
-        return redirect()->back();
+        return response()->json(['success' => false], 404);
     }
 }
