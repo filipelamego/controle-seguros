@@ -1,0 +1,19 @@
+/* Aumenta o tamanho da imagem */
+.brand-link .brand-image {
+    max-height: 100px !important; /* Mude esse 80px para o tamanho que quiser */
+    width: auto;
+    float: none !important;
+}
+
+/* Centraliza o logo e aumenta a barra azul para caber a imagem */
+.brand-link {
+    text-align: center !important;
+    height: auto !important;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+/* (Opcional) Faz o logo voltar a ser pequeno quando recolher o menu */
+.sidebar-collapse .brand-link .brand-image {
+    max-height: 33px !important;
+}
