@@ -54,7 +54,7 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>InclusãoFim</label>
+                                <label>Inclusão Fim</label>
                                 <input type="date" name="data_inclusao_fim" class="form-control"
                                     value="{{ request('data_inclusao_fim') }}">
                             </div>
