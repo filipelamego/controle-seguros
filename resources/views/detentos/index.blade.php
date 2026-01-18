@@ -19,14 +19,14 @@
         <div class="card-body table-responsive p-0">
             <table class="table table-striped table-valign-middle">
                 <thead>
-                    <tr>
+                    <tr class="text-uppercase">
                         <th>Nome</th>
-                        <th>Matrícula</th>
-                        <th>Inclusão</th>
-                        <th>Tipo</th>
-                        <th>Guia Solicitada</th>
-                        <th>Status</th>
-                        <th>Nº Guia</th>
+                        <th class="text-center">Matrícula</th>
+                        <th class="text-center">Inclusão</th>
+                        <th class="text-center">Tipo</th>
+                        <th class="text-center">Guia Solicitada</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Nº Guia</th>
                         <th class="text-center">Ações</th>
                     </tr>
                 </thead>
@@ -34,19 +34,19 @@
                     @forelse($detentos as $detento)
                         <tr>
                             <td>{{ $detento->nome }}</td>
-                            <td>{{ number_format($detento->matricula, 0, ',', '.') }}</td>
-                            <td>{{ $detento->data_inclusao?->format('d/m/Y') ?? '-' }}</td>
-                            <td>{{ $detento->tipoInclusao->descricao ?? '-' }}</td>
-                            <td>{{ $detento->data_solicitacao?->format('d/m/Y') ?? '-' }}</td>
-                            <td>
+                            <td class="text-center">{{ number_format($detento->matricula, 0, ',', '.') }}</td>
+                            <td class="text-center">{{ $detento->data_inclusao?->format('d/m/Y') ?? '-' }}</td>
+                            <td class="text-center">{{ $detento->tipoInclusao->descricao ?? '-' }}</td>
+                            <td class="text-center">{{ $detento->data_solicitacao?->format('d/m/Y') ?? '-' }}</td>
+                            <td class="text-center">
                                 <span class="badge {{ $detento->saiu_guia ? 'badge-success' : 'badge-secondary' }}">
                                     {{ $detento->saiu_guia ? 'Emitida' : 'Aguardando' }}
                                 </span>
                             </td>
-                            <td>{{ $detento->numero_guia ?? '-' }}</td>
+                            <td class="text-center">{{ $detento->numero_guia ?? '-' }}</td>
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <a href="{{ route('detentos.edit', $detento->id) }}" class="btn btn-sm btn-info"
+                                    <a href="{{ route('detentos.edit', $detento->id) }}" class="btn btn-sm btn-info mr-1"
                                         title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
@@ -54,7 +54,7 @@
                                         class="d-inline" onsubmit="return confirm('Inativar este cadastro?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" title="Inativar">
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Excluir">
                                             <i class="fas fa-user-slash"></i>
                                         </button>
                                     </form>
@@ -73,9 +73,7 @@
 
         @if ($detentos->hasPages())
             <div class="card-footer clearfix">
-                <div class="float-right">
-                    {{ $detentos->appends(request()->query())->links('pagination::bootstrap-4') }}
-                </div>
+                {{ $detentos->appends(request()->query())->links('pagination::bootstrap-4') }}
             </div>
         @endif
     </div>
