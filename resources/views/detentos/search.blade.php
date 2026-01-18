@@ -31,7 +31,7 @@
 
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Guia/Tipo Inclusão</label>
+                                <label>Situação</label>
                                 <select name="tipo_inclusao_id" class="form-control">
                                     <option value="">Todos</option>
                                     @foreach ($tipoInclusao as $tipo)
