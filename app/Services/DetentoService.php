@@ -35,7 +35,7 @@ class DetentoService
             ->when(!empty($filters['data_inclusao_fim']), function ($query) use ($filters) {
                 $query->whereDate('data_inclusao', '<=', $filters['data_inclusao_fim']);
             })
-            ->orderBy('data_inclusao', 'desc')
+            ->orderBy('data_solicitacao', 'desc')
             ->paginate($perPage);
     }
 

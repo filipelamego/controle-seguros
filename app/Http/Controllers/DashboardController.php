@@ -19,11 +19,11 @@ class DashboardController extends Controller
             ->count();
         $detentosGuiasEmitidas = Detento::where('saiu_guia', 1)
             ->where('ativo', 1)
-            ->orderBy('data_inclusao', 'desc')
+            ->orderBy('data_solicitacao', 'desc')
             ->get();
         $detentosAguardandoGuia = Detento::where('saiu_guia',0)
             ->where('ativo', 1)
-            ->orderBy('data_inclusao', 'desc')
+            ->orderBy('data_solicitacao', 'desc')
             ->get();
 
         // Retorna a view com os dados
