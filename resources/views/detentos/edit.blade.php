@@ -59,7 +59,7 @@
 
                 {{-- Linha 3 --}}
                 <div class="row col-12">
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-3 form-group">
                         <label>Já saiu a guia?</label>
                         <select name="saiu_guia" class="form-control">
                             <option value="0" {{ old('saiu_guia', $detento->saiu_guia) == 0 ? 'selected' : '' }}>
@@ -70,14 +70,24 @@
                             </option>
                         </select>
                     </div>
-
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-3 form-group">
+                        <label>RSA?</label>
+                        <select name="rsa" class="form-control">
+                            <option value="0" {{ old('rsa', $detento->rsa) == 0 ? 'selected' : '' }}>
+                                Não
+                            </option>
+                            <option value="1" {{ old('rsa', $detento->rsa) == 1 ? 'selected' : '' }}>
+                                Sim
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 form-group">
                         <label>Número da Guia</label>
                         <input type="text" name="numero_guia" class="form-control"
                             value="{{ old('numero_guia', $detento->numero_guia) }}">
                     </div>
 
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-3 form-group">
                         <label>Unidade de Destino</label>
                         <input type="text" name="unidade_destino" class="form-control"
                             value="{{ old('unidade_destino', $detento->unidade_destino) }}">

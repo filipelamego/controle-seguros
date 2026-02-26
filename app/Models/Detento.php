@@ -18,6 +18,7 @@ class Detento extends Model
         'tipo_inclusao_id',
         'data_solicitacao',
         'saiu_guia',
+        'rsa',
         'numero_guia',
         'unidade_destino',
         'ativo'

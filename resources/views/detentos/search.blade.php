@@ -8,12 +8,12 @@
             </div>
         </a>
         <div id="collapseSearch"
-            class="collapse {{ request()->anyFilled(['nome', 'matricula', 'tipo_inclusao_id', 'data_inclusao_inicio', 'data_inclusao_fim']) ? 'show' : '' }}"
+            class="collapse {{ request()->anyFilled(['nome', 'matricula', 'tipo_inclusao_id', 'rsa', 'data_inclusao_inicio', 'data_inclusao_fim']) ? 'show' : '' }}"
             data-parent="#accordion">
             <div class="card-body">
                 <form action="{{ route('detentos.index') }}" method="GET">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Nome</label>
                                 <input type="text" name="nome" class="form-control" placeholder="Parte do nome..."
@@ -28,22 +28,34 @@
                                     value="{{ request('matricula') }}">
                             </div>
                         </div>
-
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Situação</label>
-                                <select name="tipo_inclusao_id" class="form-control">
+                                <select name="rsa" class="form-control">
                                     <option value="">Todos</option>
                                     @foreach ($tipoInclusao as $tipo)
                                         <option value="{{ $tipo->id }}"
-                                            {{ request('tipo_inclusao_id') == $tipo->id ? 'selected' : '' }}>
+                                            {{ request('rsa') == $tipo->id ? 'selected' : '' }}>
                                             {{ $tipo->descricao }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Regime</label>
+                                <select name="rsa" class="form-control">
+                                    <option value="">Todos</option>
+                                    <option value="1" {{ request('rsa') === '1' ? 'selected' : '' }}>
+                                        RSA
+                                    </option>
+                                    <option value="0" {{ request('rsa') === '0' ? 'selected' : '' }}>
+                                        Fechado
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>Inclusão Início</label>

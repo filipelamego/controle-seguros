@@ -8,7 +8,7 @@ use App\Models\TipoInclusao;
 class DetentoService
 {
 
-    public function getListagemPaginada(array $filters = [], $perPage = 10)
+    public function getListagemPaginada(array $filters = [], $perPage = 15)
     {
         return Detento::with('tipoInclusao')
             ->where('ativo', 1)
@@ -29,12 +29,15 @@ class DetentoService
             ->when(!empty($filters['data_inclusao_inicio']), function ($query) use ($filters) {
                 $query->whereDate('data_inclusao', '>=', $filters['data_inclusao_inicio']);
             })
-
+            ->when(array_key_exists('rsa', $filters) && $filters['rsa'] !== '', function ($query) use ($filters) {
+                $query->where('rsa', (bool) $filters['rsa']);
+            })
             // Lógica para Data de Inclusão (Fim)
             // Se preencher só o fim, traz tudo do início dos tempos até essa data
             ->when(!empty($filters['data_inclusao_fim']), function ($query) use ($filters) {
                 $query->whereDate('data_inclusao', '<=', $filters['data_inclusao_fim']);
             })
+            ->orderBy('rsa', 'desc')
             ->orderBy('data_solicitacao', 'asc')
             ->paginate($perPage);
     }

@@ -26,6 +26,7 @@
                         <th class="text-center">Tipo</th>
                         <th class="text-center">Guia Solicitada</th>
                         <th class="text-center">Status</th>
+                        <th class="text-center">Regime</th>
                         <th class="text-center">Nº Guia</th>
                         <th class="text-center">Ações</th>
                     </tr>
@@ -41,6 +42,11 @@
                             <td class="text-center">
                                 <span class="badge {{ $detento->saiu_guia ? 'badge-success' : 'badge-secondary' }}">
                                     {{ $detento->saiu_guia ? 'Emitida' : 'Aguardando' }}
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge {{ $detento->rsa ? 'badge-primary' : 'badge-warning' }}">
+                                    {{ $detento->rsa ? 'RSA' : 'Fechado' }}
                                 </span>
                             </td>
                             <td class="text-center">{{ $detento->numero_guia ?? '-' }}</td>

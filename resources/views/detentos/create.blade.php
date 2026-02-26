@@ -45,18 +45,25 @@
                 </div>
 
                 <div class="row col-12">
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-3 form-group">
                         <label>Já saiu a guia?</label>
                         <select name="saiu_guia" class="form-control">
                             <option value="0">Não</option>
                             <option value="1">Sim</option>
                         </select>
                     </div>
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-3 form-group">
+                        <label>RSA?</label>
+                        <select name="rsa" class="form-control">
+                            <option value="0">Não</option>
+                            <option value="1">Sim</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 form-group">
                         <label>Número da Guia</label>
                         <input type="text" name="numero_guia" class="form-control">
                     </div>
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-3 form-group">
                         <label>Unidade de Destino</label>
                         <input type="text" name="unidade_destino" class="form-control">
                     </div>
